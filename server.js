@@ -1,6 +1,6 @@
+const authMiddleware = require('./middleware/authMiddleware');
 const express = require('express');
 const cors = require('cors');
-const serverless =  require('serverless-http')
 const mongoose = require('mongoose');
 
 require('dotenv').config();
@@ -25,16 +25,19 @@ mongoose.connect(connection_string, {
 
 const exerciseRouter = require('./routes/exercises')
 const userRouter = require('./routes/users')
+const authRouter = require('./routes/auth');
+const fetchuser = require('./middleware/fetchuser');
 
 app.get('/', (req, res) => {
     res.send("Welcome to our ToDo")
 })
 
 app.use('/users', userRouter)
+app.use('/signup', authRouter)
+app.use('/getuser', authRouter)
 app.use('/exercises', exerciseRouter)
+app.use('/api/notes', fetchuser, require('./routes/notes'));
 
 app.listen(port, () => {
     console.log(`Server is running on port: ${port}`);
 })
-
-module.exports.handler = serverless(app)
