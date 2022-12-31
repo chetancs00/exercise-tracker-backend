@@ -11,7 +11,7 @@ const userSchema = new Schema({
     minlength: 3
   },
   email: {
-    type: String,
+    type: Email,
     required: true,
     unique: true,
     trim: true,
@@ -20,6 +20,7 @@ const userSchema = new Schema({
   password: {
     type: String,
     required: true,
+    unique: true,
     trim: true,
     minlength: 3
   },

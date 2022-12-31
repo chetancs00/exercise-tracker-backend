@@ -1,4 +1,6 @@
 const router = require('express').Router();
+const { signup, signin, getuser } = require('../controllers/userController');
+const fetchuser = require('../middleware/fetchuser');
 let User = require('../models/user.model');
 
 router.route('/').get((req, res) => {
@@ -16,5 +18,23 @@ router.route('/add').post((req, res) => {
     .then(() => res.json('User added!'))
     .catch(err => res.status(400).json('Error: ' + err));
 });
+
+router.post("/signup", signup
+)
+router.post("/signin", signin
+)
+router.post("/getuser", fetchuser , async(req, res) => {
+  try {
+    userId = req.user
+    console.log("userid", req.user)
+    const user = await User.findById(userId).select("-password")
+      res.send(user)
+      console.log(user)
+  } catch (error) {
+      res.status(500).send("Internal Server Error")
+      console.log(error)
+  }
+}
+)
 
 module.exports = router;
